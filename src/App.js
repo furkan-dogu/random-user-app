@@ -10,12 +10,14 @@ import padlockSvg from "./assets/padlock.svg";
 import furkan from "./assets/furkan-logo.png";
 import Footer from "./components/footer/Footer";
 import axios from "axios";
+import Swal from 'sweetalert2'
 
 function App() {
   const [user, setUser] = useState({});
   const [title, setTitle] = useState("");
   const [value, setValue] = useState("");
-  const [userAdd, setUserAdd] = useState([])
+  const [userAdd, setUserAdd] = useState([]);
+  const [toggle, setToggle] = useState(true);
 
   const url = "https://randomuser.me/api/";
 
@@ -26,14 +28,16 @@ function App() {
       })
       .catch((err) => console.log(err));
 
-      setValue("")
-      setTitle("name")
+    setValue("");
+    setTitle("name");
   };
 
   useEffect(() => {
     getUser();
+    setTimeout(() => {
+      setToggle(false);
+    }, 2000);
   }, []);
-
 
   const { picture, name, email, gender, dob, location, phone, login } = user;
 
@@ -73,113 +77,131 @@ function App() {
       email: email,
       phone: phone,
       age: dob?.age,
-    }
+    };
 
-    const control = userAdd.some((item) => item.name === newUser.name && item.email === newUser.email)
+    const control = userAdd.some(
+      (item) => item.name === newUser.name && item.email === newUser.email
+    );
 
-    if(control) {
-      alert("This user is already added.")
+    if (control) {
+      Swal.fire({
+        icon: "error",
+        text: "This user is already added.",
+      });
     } else {
-      setUserAdd([...userAdd, newUser])
+      setUserAdd([...userAdd, newUser]);
     }
-
-  }
+  };
 
   return (
     <main>
-      <div className="block bcg-orange">
-        <img src={furkan} alt="furkan" id="furkan" />
-      </div>
-      <div className="block">
-        <div className="container">
-          <img src={picture?.large} alt="random user" className="user-img" />
-          <p className="user-title">My {title || "name"} is</p>
-          <p className="user-value">{value || `${name?.first} ${name?.last}`}</p>
-          <div className="values-list">
-            <button className="icon" data-label="name">
-              <img
-                src={gender === "female" ? womanSvg : manSvg}
-                alt="user"
-                id="iconImg"
-                onMouseEnter={handleName}
-              />
-            </button>
-            <button className="icon" data-label="email">
-              <img
-                src={mailSvg}
-                alt="mail"
-                id="iconImg"
-                onMouseEnter={handleEmail}
-              />
-            </button>
-            <button className="icon" data-label="age">
-              <img
-                src={gender === "female" ? womanAgeSvg : manAgeSvg}
-                alt="age"
-                id="iconImg"
-                onMouseEnter={handleAge}
-              />
-            </button>
-            <button className="icon" data-label="street">
-              <img
-                src={mapSvg}
-                alt="map"
-                id="iconImg"
-                onMouseEnter={handleStreet}
-              />
-            </button>
-            <button className="icon" data-label="phone">
-              <img
-                src={phoneSvg}
-                alt="phone"
-                id="iconImg"
-                onMouseEnter={handlePhone}
-              />
-            </button>
-            <button className="icon" data-label="password">
-              <img
-                src={padlockSvg}
-                alt="lock"
-                id="iconImg"
-                onMouseEnter={handlePassword}
-              />
-            </button>
-          </div>
-          <div className="btn-group">
-            <button className="btn" type="button" onClick={getUser}>
-              new user
-            </button>
-            <button className="btn" type="button" onClick={handleClick}>
-              add user
-            </button>
-          </div>
-
-          <table className="table">
-            <thead>
-              <tr className="head-tr">
-                <th className="th">Firstname</th>
-                <th className="th">Email</th>
-                <th className="th">Phone</th>
-                <th className="th">Age</th>
-              </tr>
-            </thead>
-            <tbody>
-              {userAdd.map(({name, email, phone, age}) => (
-                <tr className="body-tr">
-                  <td>{name}</td>
-                  <td>{email}</td>
-                  <td>{phone}</td>
-                  <td>{age}</td>
-                </tr>
-              ))}
-
-            </tbody>
-          </table>
+      {toggle ? (
+        <div className="load">
+          <p>Loading...</p>
         </div>
-      </div>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <Footer />
-      </div>
+      ) : (
+        <>
+          <div className="block bcg-orange">
+            <img src={furkan} alt="furkan" id="furkan" />
+          </div>
+          <div className="block">
+            <div className="container">
+              <img
+                src={picture?.large}
+                alt="random user"
+                className="user-img"
+              />
+              <p className="user-title">My {title || "name"} is</p>
+              <p className="user-value">
+                {value || `${name?.first} ${name?.last}`}
+              </p>
+              <div className="values-list">
+                <button className="icon" data-label="name">
+                  <img
+                    src={gender === "female" ? womanSvg : manSvg}
+                    alt="user"
+                    id="iconImg"
+                    onMouseEnter={handleName}
+                  />
+                </button>
+                <button className="icon" data-label="email">
+                  <img
+                    src={mailSvg}
+                    alt="mail"
+                    id="iconImg"
+                    onMouseEnter={handleEmail}
+                  />
+                </button>
+                <button className="icon" data-label="age">
+                  <img
+                    src={gender === "female" ? womanAgeSvg : manAgeSvg}
+                    alt="age"
+                    id="iconImg"
+                    onMouseEnter={handleAge}
+                  />
+                </button>
+                <button className="icon" data-label="street">
+                  <img
+                    src={mapSvg}
+                    alt="map"
+                    id="iconImg"
+                    onMouseEnter={handleStreet}
+                  />
+                </button>
+                <button className="icon" data-label="phone">
+                  <img
+                    src={phoneSvg}
+                    alt="phone"
+                    id="iconImg"
+                    onMouseEnter={handlePhone}
+                  />
+                </button>
+                <button className="icon" data-label="password">
+                  <img
+                    src={padlockSvg}
+                    alt="lock"
+                    id="iconImg"
+                    onMouseEnter={handlePassword}
+                  />
+                </button>
+              </div>
+              <div className="btn-group">
+                <button className="btn" type="button" onClick={getUser}>
+                  new user
+                </button>
+                <button className="btn" type="button" onClick={handleClick}>
+                  add user
+                </button>
+              </div>
+
+              <table className="table">
+                <thead>
+                  <tr className="head-tr">
+                    <th className="th">Firstname</th>
+                    <th className="th">Email</th>
+                    <th className="th">Phone</th>
+                    <th className="th">Age</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {userAdd.map(({ name, email, phone, age }, index) => (
+                    <tr key={index} className="body-tr">
+                      <td>{name}</td>
+                      <td>{email}</td>
+                      <td>{phone}</td>
+                      <td>{age}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Footer />
+          </div>
+        </>
+      )}
+
     </main>
   );
 }
