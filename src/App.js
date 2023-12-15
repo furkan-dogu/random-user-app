@@ -10,7 +10,7 @@ import padlockSvg from "./assets/padlock.svg";
 import furkan from "./assets/furkan-logo.png";
 import Footer from "./components/footer/Footer";
 import axios from "axios";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 function App() {
   const [user, setUser] = useState({});
@@ -23,23 +23,33 @@ function App() {
 
   const getUser = () => {
     axios(url)
-      .then((res) => {
+    .then((res) => {
         setUser(res.data.results[0]);
       })
       .catch((err) => console.log(err));
 
-    setValue("");
     setTitle("name");
+    setValue("Loading...");
   };
+  
+  const { picture, name, email, gender, dob, location, phone, login } = user;
+  
+  const newTitle = "name"
+  const newValue = `${name?.first} ${name?.last}`
+
+  useEffect(() => {
+    setTitle(newTitle);
+    setValue(newValue);
+  }, [newTitle, newValue])
+  
 
   useEffect(() => {
     getUser();
     setTimeout(() => {
       setToggle(false);
-    }, 2000);
+    }, 2000);    
   }, []);
 
-  const { picture, name, email, gender, dob, location, phone, login } = user;
 
   const handleName = () => {
     setTitle("name");
@@ -111,10 +121,11 @@ function App() {
                 alt="random user"
                 className="user-img"
               />
-              <p className="user-title">My {title || "name"} is</p>
-              <p className="user-value">
-                {value || `${name?.first} ${name?.last}`}
-              </p>
+              <div className="user-list">
+              <p className="user-title">My {title} is</p>
+              <p className="user-value">{value}</p>
+              </div>
+
               <div className="values-list">
                 <button className="icon" data-label="name">
                   <img
@@ -201,7 +212,6 @@ function App() {
           </div>
         </>
       )}
-
     </main>
   );
 }
