@@ -8,6 +8,13 @@
 
 This React project is a web application that displays random user data by utilizing data retrieved from an API.
 
+## Table of Contents
+
+- [Features](#features)
+- [Dependencies](#dependencies)
+- [Project Skeleton](#project-skeleton)
+- [Screenshots](#screenshots)
+
 ## Live Demo
 
 [Random User App](https://random-user-app-virid.vercel.app/)
@@ -17,6 +24,12 @@ This React project is a web application that displays random user data by utiliz
 - Fetches and displays random user data.
 - Allows navigation between different users.
 - Includes basic information, contact details, and images of users.
+
+## Dependencies
+
+- Bootstrap
+- Axios
+- Sweetalert2
 
 ## Project Skeleton
 
@@ -52,9 +65,3 @@ SOLUTION
 ## Compatibility
 
 The project is compatible with both wide-screen computers and mobile devices.
-
-## Dependencies
-
-- Bootstrap
-- Axios
-- Sweetalert2
